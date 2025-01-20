@@ -41,8 +41,8 @@ git clone https://github.com/your-repo/aspnet-mvc-blog.git
 #### 3. Apply migrations to the database:
 
 ```bash
-dotnet ef migrations add InitialCreate
-dotnet ef database update
+Add-Migration Intial
+Update-Database
 ```
 
 ### 2. Run the application:
