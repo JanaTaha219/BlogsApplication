@@ -27,7 +27,7 @@ This is a simple blog management application built using ASP.NET Core MVC. The a
 ### 1. Clone the repository:
 ```bash
 git clone https://github.com/your-repo/aspnet-mvc-blog.git
-
+```
 ### 2. Set up the database:
 #### 1. Create a new SQL Server database and configure it with the following connection string:
 
