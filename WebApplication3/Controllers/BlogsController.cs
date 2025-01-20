@@ -29,6 +29,13 @@ namespace WebApplication3.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            Blog blog = await blogContext.Blogs.FindAsync(id);
+            if (blog == null) return RedirectToAction("Index", "Blogs");
+            return View(blog);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(BlogDTO blogDTO)
         {

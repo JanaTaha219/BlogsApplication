@@ -1,47 +1,86 @@
 ﻿@model List<Blog>
 @{
+    var categories = new List<string> { "Technology", "Health", "Education", "Travel", "Lifestyle" };
 }
 
 <h2 class="text-center mb-5">List Of Blogs</h2>
 
 <div class="row mb-5">
-	<div class="col">
-		<a class="btn btn-primary" asp-controller="Blogs" asp-action="Create">New Blog</a>
-	</div>
-	<div class="col">
-	</div>
+    <div class="col">
+        <a class="btn btn-primary" asp-controller="Blogs" asp-action="Create">New Blog</a>
+    </div>
+    <div class="col">
+    </div>
+
+    <div class="d-flex justify-content-end mb-3">
+        <select id="categoryFilter" style="width: auto;" class="form-control" asp-items="@(new SelectList(categories))">
+            <option value="">-- Filter by Category --</option>
+        </select>
+    </div>
+
+    <div class="d-flex justify-content-end mb-3">
+        <input id="searchInput" placeholder="Search by Author or Title" class="form-control" style="width: auto;" />
+    </div>
 </div>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Title</th>
-			<th>Author</th>
-			<th>Excerpt</th>
-			<th>Category</th>
-			<th>CreatedDate</th>
-			<th>Action </th>
-		</tr>
-	</thead>
-
-	<tbody>
-			@foreach (var blog in Model){
-				<tr>
-					<td>@blog.Id </td>
-					<td>@blog.Title</td>
-					<td>@blog.Author</td>
-					<td>@blog.Excerpt</td>
-					<td>@blog.Category</td>
-					<td>@blog.CreatedDate.ToString("MM/dd/yyyy")</td>
-					<td style="white-space:nowrap">
-						<a class="btn btn-primary btn-sm" asp-controller="Blogs" asp-action="Edit"
-					   asp-route-id="@blog.Id">Edit</a>
-						<a class="btn btn-danger btn-sm" asp-controller="Blogs" asp-action="Delete"
-					   asp-route-id="@blog.Id" onclick="return confirm('Are you sure?')">Delete</a>
-				</td>
-				</tr>
-		}
-
-	</tbody>
+<table class="table" id="blogsTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Excerpt</th>
+            <th>Category</th>
+            <th>CreatedDate</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var blog in Model)
+        {
+            <tr data-category="@blog.Category" data-title="@blog.Title.ToLower()" data-author="@blog.Author.ToLower()">
+                <td>@blog.Id</td>
+                <td>@blog.Title</td>
+                <td>@blog.Author</td>
+                <td>@blog.Excerpt</td>
+                <td>@blog.Category</td>
+                <td>@blog.CreatedDate.ToString("MM/dd/yyyy")</td>
+                <td style="white-space:nowrap">
+                    <a class="btn btn-primary btn-sm" asp-controller="Blogs" asp-action="Edit" asp-route-id="@blog.Id">Edit</a>
+                    <a class="btn btn-info btn-sm" asp-controller="Blogs" asp-action="Details" asp-route-id="@blog.Id">Details</a>
+                    <a class="btn btn-danger btn-sm" asp-controller="Blogs" asp-action="Delete" asp-route-id="@blog.Id" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+<script>
+    const categoryFilter = document.getElementById('categoryFilter');
+    const searchInput = document.getElementById('searchInput');
+    const rows = document.querySelectorAll('#blogsTable tbody tr');
+
+    function filterRows() {
+        const selectedCategory = categoryFilter.value.toLowerCase();
+        const searchText = searchInput.value.toLowerCase();
+
+        rows.forEach(row => {
+            const rowCategory = row.getAttribute('data-category').toLowerCase();
+            const rowTitle = row.getAttribute('data-title');
+            const rowAuthor = row.getAttribute('data-author');
+
+            // Check category and text match
+            const matchesCategory = !selectedCategory || rowCategory === selectedCategory;
+            const matchesText = !searchText || rowTitle.includes(searchText) || rowAuthor.includes(searchText);
+
+            if (matchesCategory && matchesText) {
+                row.style.display = ""; // Show row
+            } else {
+                row.style.display = "none"; // Hide row
+            }
+        });
+    }
+
+    categoryFilter.addEventListener('change', filterRows);
+    searchInput.addEventListener('input', filterRows);
+</script>
