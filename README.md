@@ -18,7 +18,7 @@ This is a simple blog management application built using ASP.NET Core MVC. The a
 - Bootstrap (for UI)
 
 ## Requirements
-- .NET 6 or later
+- .NET 8 or later
 - SQL Server (or any other compatible database provider)
 - Visual Studio (or any other compatible IDE)
 
