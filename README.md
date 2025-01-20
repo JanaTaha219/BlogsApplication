@@ -35,7 +35,7 @@ git clone https://github.com/your-repo/aspnet-mvc-blog.git
    "ConnectionStrings": {
       "Blogs": "Server=your-server;Database=your-database;User Id=your-username;Password=your-password;"
    }
-
+```
 #### 2. Ensure that the BlogContext is correctly set up to use this connection string.
 
 #### 3. Apply migrations to the database:
